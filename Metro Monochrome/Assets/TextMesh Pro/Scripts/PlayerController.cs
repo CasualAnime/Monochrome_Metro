@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 
     // Money
     public Money money;
-    public int currentMoney, maxMoney = 1000, walletSize = 1;
+    public int currentMoney, maxMoney = 2000, cappedMoney = 10000;
 
     void Start()
     {
@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
         stamina.SetValue(currentStamina);
 
         currentMoney = 100;
-        money.SetValue(currentMoney);
+        money.SetValue(currentMoney, maxMoney);
     }
 
 
@@ -26,21 +26,25 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.U))
         {
             GainStamina(25);
+            GainMoney(50);
         }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
             LoseStamina(25);
+            LoseMoney(50);
         }
 
         if (Input.GetKeyDown(KeyCode.O))
         {
             RaiseMaxStamina(50);
+            RaiseMaxMoney(1000);
         }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
             LowerMaxStamina(50);
+            LowerMaxMoney(1000);
         }
     }
 
@@ -48,6 +52,11 @@ public class PlayerController : MonoBehaviour
     public void LoseStamina(int amountLost)
     {
         currentStamina -= amountLost;
+        if (currentStamina < 0)
+        {
+            currentStamina = 0;
+        }
+
         stamina.SetValue(currentStamina);
     }
 
@@ -86,6 +95,12 @@ public class PlayerController : MonoBehaviour
     {
         maxStamina -= amountLost;
 
+        // stamina can't go below a certain value
+        if (maxStamina < 50)
+        {
+            maxStamina = 50;
+        }
+
         // if at max stamina and then lowers the cap, set currentStamina = new maxStamina
         if (currentStamina > maxStamina)
         {
@@ -109,7 +124,7 @@ public class PlayerController : MonoBehaviour
             currentMoney = maxMoney;
         }
 
-        money.SetValue(currentMoney);
+        money.SetValue(currentMoney, maxMoney);
     }
 
     // Lose Money
@@ -119,6 +134,28 @@ public class PlayerController : MonoBehaviour
 
         // if the player is in debt, gain broke status
 
-        money.SetValue(currentMoney);
+        money.SetValue(currentMoney, maxMoney);
+    }
+
+    public void RaiseMaxMoney(int amount)
+    {
+        maxMoney += amount;
+        if (maxMoney > cappedMoney)
+        {
+            maxMoney = cappedMoney;
+        }
+
+        money.SetValue(currentMoney, maxMoney);
+    }
+    
+    public void LowerMaxMoney(int amount)
+    {
+        maxMoney -= amount;
+        if (maxMoney < 100)
+        {
+            maxMoney = 100;
+        }
+
+        money.SetValue(currentMoney, maxMoney);
     }
 }

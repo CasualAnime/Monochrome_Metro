@@ -8,8 +8,8 @@ public class Money : MonoBehaviour
     public TextMeshProUGUI moneyAmount;
 
 
-    public void SetValue(int amount)
+    public void SetValue(int amount, int max)
     {
-        moneyAmount.text = amount.ToString();
+        moneyAmount.text = amount.ToString() + " / " + max.ToString();
     }
 }
