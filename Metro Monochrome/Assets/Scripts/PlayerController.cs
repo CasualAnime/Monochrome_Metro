@@ -4,11 +4,15 @@ public class PlayerController : MonoBehaviour
 {
     // Stamina
     public StaminaBar stamina;
-    public int maxStamina = 100, currentStamina, cappedStamina = 200;
+    [SerializeField] int maxStamina = 100, currentStamina, cappedStamina = 200;
 
     // Money
     public Money money;
-    public int currentMoney, maxMoney = 2000, cappedMoney = 10000;
+    [SerializeField] int currentMoney, maxMoney = 2000, cappedMoney = 10000;
+
+    // Moves
+    public Turns turns;
+    [SerializeField] int movesRemaining;
 
     void Start()
     {
@@ -25,43 +29,32 @@ public class PlayerController : MonoBehaviour
         // Testing Stamina
         if (Input.GetKeyDown(KeyCode.U))
         {
-            GainStamina(25);
-            GainMoney(50);
+            ManipulateStamina(25);
+            ManipulateMoney(50);
         }
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            LoseStamina(25);
-            LoseMoney(50);
+            ManipulateStamina(-25);
+            ManipulateMoney(-50);
         }
 
         if (Input.GetKeyDown(KeyCode.O))
         {
-            RaiseMaxStamina(50);
-            RaiseMaxMoney(1000);
+            ManipulateMaxStamina(50);
+            ManipulateMaxMoney(1000);
         }
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            LowerMaxStamina(50);
-            LowerMaxMoney(1000);
+            ManipulateMaxStamina(-50);
+            ManipulateMaxMoney(-1000);
         }
     }
 
-    // Lose Stamina
-    public void LoseStamina(int amountLost)
-    {
-        currentStamina -= amountLost;
-        if (currentStamina < 0)
-        {
-            currentStamina = 0;
-        }
 
-        stamina.SetValue(currentStamina);
-    }
-
-    // Gain Stamina
-    public void GainStamina(int amountGained)
+    // Gain and Lose Stamina
+    public void ManipulateStamina(int amountGained)
     {
         currentStamina += amountGained;
 
@@ -73,11 +66,16 @@ public class PlayerController : MonoBehaviour
             currentStamina = maxStamina;
         }
 
+        else if (currentStamina < 0)
+        {
+            currentStamina = 0;
+        }
+
         stamina.SetValue(currentStamina);
     }
 
-    // Raise Stamina Cap
-    public void RaiseMaxStamina(int amountGained)
+    // Raise and Lower Stamina Cap
+    public void ManipulateMaxStamina(int amountGained)
     {
         maxStamina += amountGained;
 
@@ -87,16 +85,8 @@ public class PlayerController : MonoBehaviour
             maxStamina = cappedStamina;
         }
 
-        stamina.ManipulateMaxValue(maxStamina);
-    }
-
-    // Lowers Stamina Cap
-    public void LowerMaxStamina(int amountLost)
-    {
-        maxStamina -= amountLost;
-
         // stamina can't go below a certain value
-        if (maxStamina < 50)
+        else if (maxStamina < 50)
         {
             maxStamina = 50;
         }
@@ -111,12 +101,9 @@ public class PlayerController : MonoBehaviour
         stamina.ManipulateMaxValue(maxStamina);
     }
 
-    // Lose Time
 
-    // Gain Time
-
-    // Gain Money
-    public void GainMoney(int moneyGained)
+    // Gain and Lose Money
+    public void ManipulateMoney(int moneyGained)
     {
         currentMoney += moneyGained;
         if (currentMoney > maxMoney)
@@ -124,20 +111,14 @@ public class PlayerController : MonoBehaviour
             currentMoney = maxMoney;
         }
 
-        money.SetValue(currentMoney, maxMoney);
-    }
-
-    // Lose Money
-    public void LoseMoney(int moneyLost)
-    {
-        currentMoney -= moneyLost; // allow for the player to be in debt
-
         // if the player is in debt, gain broke status
 
         money.SetValue(currentMoney, maxMoney);
     }
 
-    public void RaiseMaxMoney(int amount)
+
+    // Raise and Lower Max Money
+    public void ManipulateMaxMoney(int amount)
     {
         maxMoney += amount;
         if (maxMoney > cappedMoney)
@@ -145,17 +126,19 @@ public class PlayerController : MonoBehaviour
             maxMoney = cappedMoney;
         }
 
-        money.SetValue(currentMoney, maxMoney);
-    }
-    
-    public void LowerMaxMoney(int amount)
-    {
-        maxMoney -= amount;
-        if (maxMoney < 100)
+        else if (maxMoney < 100)
         {
             maxMoney = 100;
         }
 
         money.SetValue(currentMoney, maxMoney);
     }
+
+    public void ManipulateMoves(int amount)
+    {
+        movesRemaining -= amount;
+
+        turns.SetValue(movesRemaining);
+    }
+    
 }
