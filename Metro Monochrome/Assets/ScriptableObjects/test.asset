@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a49f0d19b192114099fb12bd71ebb68, type: 3}
   m_Name: test
   m_EditorClassIdentifier: Assembly-CSharp::StatChangeEvent
-  scenarioText: 
   movesCost: 1
-  moneyChange: 0
-  staminaChange: 0
+  moneyChange: 100
+  staminaChange: -20
   moneyCapacity: 0
   staminaCapacity: 0
