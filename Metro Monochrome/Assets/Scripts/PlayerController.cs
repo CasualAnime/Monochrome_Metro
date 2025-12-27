@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
 
     public void ManipulateMoves(int amount)
     {
-        movesRemaining -= amount;
+        movesRemaining += amount;
 
         turns.SetValue(movesRemaining);
     }

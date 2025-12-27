@@ -1184,6 +1184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventDisplay
   currentEvent: {fileID: 11400000, guid: 5b7a3f600ce588e49bcb51ad6c9e7d8f, type: 2}
+  manager: {fileID: 1729447211}
   choicePrefab: {fileID: 7082126847112960408, guid: 56bac8c8e0445214980cff60c0ea1d22, type: 3}
   menuTransform: {fileID: 241652244}
 --- !u!1 &1165696040
