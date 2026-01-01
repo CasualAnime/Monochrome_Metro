@@ -1,12 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class GameManager : MonoBehaviour
 {
     public PlayerController playerController;
 
+    private bool isGameOver = false;
+
+    void Update()
+    {
+        EndGame();
+    }
+
+    private void EndGame()
+    {
+        isGameOver = playerController.CheckStats();
+        if (isGameOver)
+        {
+            SceneManager.LoadScene("GameOver");
+        }
+    }
 
     public void UpdateCurrentStats(int movesCost, int moneyChange, int staminaChange)
     {

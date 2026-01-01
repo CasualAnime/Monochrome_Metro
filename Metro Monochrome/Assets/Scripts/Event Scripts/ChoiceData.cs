@@ -12,4 +12,6 @@ public class ChoiceData : ScriptableObject
     public string outcomeText;
     public string[] randomOutcomeText;
     public int[] newStaminaChange, newMoneyChange, newMovesChange;
+
+    public EventSO[] nextEvent;
 }

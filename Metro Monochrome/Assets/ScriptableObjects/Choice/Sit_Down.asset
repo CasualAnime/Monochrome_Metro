@@ -23,3 +23,6 @@ MonoBehaviour:
   newStaminaChange: fbfffffff1ffffff
   newMoneyChange: 0000000000000000
   newMovesChange: 0000000000000000
+  nextEvent:
+  - {fileID: 11400000, guid: 570516b1d75fe9244ad885e331e762e1, type: 2}
+  - {fileID: 11400000, guid: c8ac946483a519a4e86304f36abc04e0, type: 2}

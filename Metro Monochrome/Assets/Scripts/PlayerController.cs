@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -26,30 +27,18 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Testing Stamina
-        if (Input.GetKeyDown(KeyCode.U))
+        Test();
+    }
+
+    public bool CheckStats()
+    {
+        if (currentStamina <= 0 || movesRemaining <= 0)
         {
-            ManipulateStamina(25);
-            ManipulateMoney(50);
+            Debug.Log("Game Over");
+            return true;
         }
 
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            ManipulateStamina(-25);
-            ManipulateMoney(-50);
-        }
-
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            ManipulateMaxStamina(50);
-            ManipulateMaxMoney(1000);
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            ManipulateMaxStamina(-50);
-            ManipulateMaxMoney(-1000);
-        }
+        return false;
     }
 
 
@@ -139,6 +128,39 @@ public class PlayerController : MonoBehaviour
         movesRemaining += amount;
 
         turns.SetValue(movesRemaining);
+    }
+
+    private void Test()
+    {
+        // Testing Stamina
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            ManipulateStamina(25);
+            ManipulateMoney(50);
+        }
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            ManipulateStamina(-25);
+            ManipulateMoney(-50);
+        }
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ManipulateMaxStamina(50);
+            ManipulateMaxMoney(1000);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ManipulateMaxStamina(-50);
+            ManipulateMaxMoney(-1000);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            ManipulateMoves(-1);
+        }
     }
     
 }

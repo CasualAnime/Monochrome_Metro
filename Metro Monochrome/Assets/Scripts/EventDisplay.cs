@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using TMPro.EditorUtilities;
 using Unity.VisualScripting;
+using System.Threading;
 
 public class EventDisplay : MonoBehaviour
 {
@@ -17,9 +18,7 @@ public class EventDisplay : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(currentEvent.situation);
-        choiceList = currentEvent.choices;
-        CreateChoices();
+        CreateEvent();
     }
 
     // Update is called once per frame
@@ -30,6 +29,11 @@ public class EventDisplay : MonoBehaviour
 
     public void UpdateChoices(int index)
     {
+        if (choiceList.Length == 0) 
+        {
+            Debug.Log("No Choices");
+            return;
+        }
         ChoiceData currentChoice = choiceList[index];
 
         // Get text
@@ -43,9 +47,24 @@ public class EventDisplay : MonoBehaviour
 
         manager.UpdateCurrentStats(movesCost, moneyCost, staminaCost);
 
+        NextEvent(currentChoice);
         // Do Random Outcome afterwards
         //UpdateRandomChoice(currentChoice);
 
+    }
+
+    private void NextEvent(ChoiceData currentChoice)
+    {
+        // reset current event
+        ResetCurrentEvent();
+
+        // go to next event
+        Debug.Log("Next Event Length: " + currentChoice.nextEvent.Length.ToString());
+        int randomNumber = Random.Range(0, currentChoice.nextEvent.Length);
+        Debug.Log("Random Number: " + randomNumber.ToString());
+        currentEvent = currentChoice.nextEvent[randomNumber];
+
+        CreateEvent();
     }
 
     private void UpdateRandomChoice(ChoiceData currentChoice)
@@ -70,6 +89,13 @@ public class EventDisplay : MonoBehaviour
         manager.UpdateCurrentStats(movesCost, moneyCost, staminaCost);
     }
 
+    private void CreateEvent()
+    {
+        Debug.Log(currentEvent.situation);
+        choiceList = currentEvent.choices;
+        CreateChoices();
+    }
+
     private void CreateChoices()
     {
         foreach (ChoiceData choice in choiceList)
@@ -78,7 +104,14 @@ public class EventDisplay : MonoBehaviour
             newChoice.transform.SetParent(menuTransform, false); 
 
             newChoice.GetComponentInChildren<TMP_Text>().text = choice.choiceText;
+        }
+    }
 
+    private void ResetCurrentEvent()
+    {
+        foreach (Transform child in menuTransform)
+        {
+            GameObject.Destroy(child.gameObject);
         }
     }
 }
