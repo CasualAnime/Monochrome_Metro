@@ -14,6 +14,6 @@ public class ChoiceButton : MonoBehaviour
     {
         index = gameObject.transform.GetSiblingIndex();
         Debug.Log(index);
-        eventDisplay.UpdateChoices(index);
+        eventDisplay.OnChoiceSelected(index);
     }
 }

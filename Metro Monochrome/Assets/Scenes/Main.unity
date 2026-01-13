@@ -1183,7 +1183,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52eaba557de11124398a2b014bf45a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventDisplay
-  currentEvent: {fileID: 11400000, guid: 5b7a3f600ce588e49bcb51ad6c9e7d8f, type: 2}
   manager: {fileID: 1729447211}
   choicePrefab: {fileID: 7082126847112960408, guid: 56bac8c8e0445214980cff60c0ea1d22, type: 3}
   menuTransform: {fileID: 241652244}
@@ -1630,6 +1629,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   playerController: {fileID: 224436108}
+  eventDisplay: {fileID: 1104922459}
+  eventList:
+  - {fileID: 11400000, guid: 5b7a3f600ce588e49bcb51ad6c9e7d8f, type: 2}
+  - {fileID: 11400000, guid: c8ac946483a519a4e86304f36abc04e0, type: 2}
+  - {fileID: 11400000, guid: 570516b1d75fe9244ad885e331e762e1, type: 2}
 --- !u!4 &1729447212
 Transform:
   m_ObjectHideFlags: 0
