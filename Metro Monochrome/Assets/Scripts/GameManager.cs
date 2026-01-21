@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
 
     }
 
+    // randomly selects an event
     private void RandomizeEvent()
     {
         // get random index to choose a random event from the eventList
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
         eventDisplay.SetCurrentEvent(currentEvent);
     }
 
+    // randomly select an event based off of a choice
     private void RandomizeEvent(ChoiceData currentChoice)
     {
         // get random index
@@ -99,7 +101,7 @@ public class GameManager : MonoBehaviour
         UpdateCurrentStats(movesCost, moneyCost, staminaCost);
 
         // Do Random Outcome afterwards
-        //UpdateRandomChoice(currentChoice);
+        UpdateRandomChoice(currentChoice);
 
         // get random event based off choice
         RandomizeEvent(currentChoice);
@@ -117,10 +119,13 @@ public class GameManager : MonoBehaviour
         //Check if there is a random outcome
         if (currentChoice.randomOutcomeText.Length == 0) return;
 
+        // Get random outcome and a random number 
         int randomOutcomeProbability = Random.Range(0, 100);
-
         int randomNumber = Random.Range(0, currentChoice.randomOutcomeText.Length);
-        Debug.Log(randomNumber.ToString());
+        Debug.Log(randomOutcomeProbability.ToString());
+
+        // check if the random number falls outside of the random outcome's ocurrence probability
+        if (randomOutcomeProbability > currentChoice.probability[randomNumber]) return;
 
         // Get the random outcome text
         string randomOutcome = currentChoice.randomOutcomeText[randomNumber];
