@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     private bool isGameOver = false;
 
     [SerializeField] EventSO[] eventList;
-    private EventSO currentEvent;
+    private EventSO currentEvent, previousEvent;
 
     void Start()
     {
@@ -41,15 +41,15 @@ public class GameManager : MonoBehaviour
         {
             // change money
             playerController.ManipulateMoney(moneyChange);
-            Debug.Log("Changed money by " + moneyChange.ToString());
+            //Debug.Log("Changed money by " + moneyChange.ToString());
             
             // change stamina
             playerController.ManipulateStamina(staminaChange);
-            Debug.Log("Changed stamina by " + staminaChange.ToString());
+            //Debug.Log("Changed stamina by " + staminaChange.ToString());
             
             // change moves
             playerController.ManipulateMoves(movesCost);
-            Debug.Log("Changed moves by " + movesCost.ToString());
+            //Debug.Log("Changed moves by " + movesCost.ToString());
         }
 
     }
@@ -64,10 +64,26 @@ public class GameManager : MonoBehaviour
     // randomly selects an event
     private void RandomizeEvent()
     {
+        // track seen events
+        previousEvent = currentEvent;
+        Debug.Log("Previous Event: " + previousEvent);
+
         // get random index to choose a random event from the eventList
         int randomIndex = Random.Range(0, eventList.Length);
         Debug.Log(randomIndex);
         currentEvent = eventList[randomIndex];
+        Debug.Log("Current Event: " + currentEvent);
+
+         // Avoid immediate repeat events
+        if (currentEvent == previousEvent)
+        {
+            while (currentEvent == previousEvent)
+            {
+                randomIndex = Random.Range(0, eventList.Length);
+                currentEvent = eventList[randomIndex];
+                Debug.Log("Current Event: " + currentEvent);
+            }
+        }
 
         // Display random event
         eventDisplay.SetCurrentEvent(currentEvent);
@@ -76,13 +92,28 @@ public class GameManager : MonoBehaviour
     // randomly select an event based off of a choice
     private void RandomizeEvent(ChoiceData currentChoice)
     {
+        // track seen events
+        previousEvent = currentEvent;
+        Debug.Log("Previous Event: " + previousEvent);
+
         // get random index
-        Debug.Log("Next Event Length: " + currentChoice.nextEvent.Length.ToString());
         int randomNumber = Random.Range(0, currentChoice.nextEvent.Length);
 
         // get random event based off of index
         Debug.Log("Random Number: " + randomNumber.ToString());
         currentEvent = currentChoice.nextEvent[randomNumber];
+        Debug.Log("Current Event: " + currentEvent);
+
+        // Avoid immediate repeat events
+        if (currentEvent == previousEvent)
+        {
+            while (currentEvent == previousEvent)
+            {
+                randomNumber = Random.Range(0, currentChoice.nextEvent.Length);
+                currentEvent = currentChoice.nextEvent[randomNumber];
+                Debug.Log("Current Event: " + currentEvent);
+            }
+        }
 
         // display random event
         eventDisplay.SetCurrentEvent(currentEvent);
