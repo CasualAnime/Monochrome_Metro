@@ -21,7 +21,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // testing
         if (Input.GetKeyDown(KeyCode.R)) RandomizeEvent();
+        if (Input.GetKeyDown(KeyCode.T)) ResetGame();
 
         EndGame();
     }
@@ -147,6 +149,16 @@ public class GameManager : MonoBehaviour
 
     private void UpdateRandomChoice(ChoiceData currentChoice)
     {
+        Debug.Log
+        (
+            $"OutcomeText: {currentChoice.randomOutcomeText.Length}, " +
+            $"Prob: {currentChoice.probability.Length}, " +
+            $"Moves: {currentChoice.newMovesChange.Length}, " +
+            $"Money: {currentChoice.newMoneyChange.Length}, " +
+            $"Stamina: {currentChoice.newStaminaChange.Length}"
+        );
+
+
         //Check if there is a random outcome
         if (currentChoice.randomOutcomeText.Length == 0) return;
 
@@ -168,6 +180,11 @@ public class GameManager : MonoBehaviour
         int staminaCost = currentChoice.newStaminaChange[randomNumber];
 
         UpdateCurrentStats(movesCost, moneyCost, staminaCost);
+    }
+
+    private void ResetGame()
+    {
+        SceneManager.LoadScene("Main");
     }
 
 }
