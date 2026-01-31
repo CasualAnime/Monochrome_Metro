@@ -158,6 +158,7 @@ MonoBehaviour:
   cappedMoney: 10000
   turns: {fileID: 1777663309}
   movesRemaining: 30
+  distanceToGoal: 5
 --- !u!4 &224436109
 Transform:
   m_ObjectHideFlags: 0

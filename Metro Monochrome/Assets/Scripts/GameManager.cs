@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     public EventDisplay eventDisplay;
     
     private bool isGameOver = false;
+    private int isGameWon = 0;
 
     [SerializeField] EventSO[] eventList;
     private EventSO currentEvent, previousEvent;
@@ -31,8 +33,13 @@ public class GameManager : MonoBehaviour
     private void EndGame()
     {
         isGameOver = playerController.CheckStats();
+        isGameWon = playerController.CheckWin();
+
         if (isGameOver)
         {
+            PlayerPrefs.SetInt("Win?", isGameWon);
+            PlayerPrefs.Save();
+
             SceneManager.LoadScene("GameOver");
         }
     }

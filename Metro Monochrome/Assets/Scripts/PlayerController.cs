@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     // Moves
     public Turns turns;
-    [SerializeField] int movesRemaining;
+    [SerializeField] int movesRemaining, distanceToGoal = 50;
 
     void Start()
     {
@@ -32,13 +32,24 @@ public class PlayerController : MonoBehaviour
 
     public bool CheckStats()
     {
-        if (currentStamina <= 0 || movesRemaining <= 0)
+        if (currentStamina <= 0 || movesRemaining <= 0 || distanceToGoal <= 0)
         {
             Debug.Log("Game Over");
             return true;
         }
 
         return false;
+    }
+
+    public int CheckWin()
+    {
+        if (currentStamina > 0 && movesRemaining > 0 && distanceToGoal <= 0)
+        {
+            Debug.Log("You Win!");
+            return 1;
+        }
+
+        return 0;
     }
 
 
@@ -130,6 +141,13 @@ public class PlayerController : MonoBehaviour
         turns.SetValue(movesRemaining);
     }
 
+    public void ManipulateDistance(int amount)
+    {
+        distanceToGoal += amount;
+
+        // set distance bar 
+    }
+
     private void Test()
     {
         // Testing Stamina
@@ -161,6 +179,8 @@ public class PlayerController : MonoBehaviour
         {
             ManipulateMoves(-1);
         }
+
+        if (Input.GetKeyDown(KeyCode.J)) ManipulateDistance(-1);
     }
     
 }
