@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController;
     public EventDisplay eventDisplay;
     
-    private bool isGameOver = false;
+    private bool isGameOver = false, sideEffect_nextEvent = false;
     private int isGameWon = 0;
 
     [SerializeField] EventSO[] eventList;
@@ -75,24 +75,23 @@ public class GameManager : MonoBehaviour
     {
         // track seen events
         previousEvent = currentEvent;
-        Debug.Log("Previous Event: " + previousEvent);
+        //Debug.Log("Previous Event: " + previousEvent);
 
         // get random index to choose a random event from the eventList
         int randomIndex = Random.Range(0, eventList.Length);
-        Debug.Log(randomIndex);
+        //Debug.Log(randomIndex);
         currentEvent = eventList[randomIndex];
-        Debug.Log("Current Event: " + currentEvent);
+        //Debug.Log("Current Event: " + currentEvent);
 
          // Avoid immediate repeat events
-        if (currentEvent == previousEvent)
+        
+        while (currentEvent == previousEvent)
         {
-            while (currentEvent == previousEvent)
-            {
-                randomIndex = Random.Range(0, eventList.Length);
-                currentEvent = eventList[randomIndex];
-                Debug.Log("Current Event: " + currentEvent);
-            }
+            randomIndex = Random.Range(0, eventList.Length);
+            currentEvent = eventList[randomIndex];
+            //Debug.Log("Current Event: " + currentEvent);
         }
+        
 
         // Display random event
         eventDisplay.SetCurrentEvent(currentEvent);
@@ -103,26 +102,43 @@ public class GameManager : MonoBehaviour
     {
         // track seen events
         previousEvent = currentEvent;
-        Debug.Log("Previous Event: " + previousEvent);
+        //Debug.Log("Previous Event: " + previousEvent);
 
         // get random index
         int randomNumber = Random.Range(0, currentChoice.nextEvent.Length);
 
         // get random event based off of index
-        Debug.Log("Random Number: " + randomNumber.ToString());
+        //Debug.Log("Random Number: " + randomNumber.ToString());
         currentEvent = currentChoice.nextEvent[randomNumber];
-        Debug.Log("Current Event: " + currentEvent);
+        //Debug.Log("Current Event: " + currentEvent);
 
         // Avoid immediate repeat events
-        if (currentEvent == previousEvent)
+        while (currentEvent == previousEvent)
         {
-            while (currentEvent == previousEvent)
-            {
-                randomNumber = Random.Range(0, currentChoice.nextEvent.Length);
-                currentEvent = currentChoice.nextEvent[randomNumber];
-                Debug.Log("Current Event: " + currentEvent);
-            }
+            randomNumber = Random.Range(0, currentChoice.nextEvent.Length);
+            currentEvent = currentChoice.nextEvent[randomNumber];
+            //Debug.Log("Current Event: " + currentEvent);
         }
+
+        // display random event
+        eventDisplay.SetCurrentEvent(currentEvent);
+    }
+
+    private void RandomizeEvent(SideEffectSO sideEffect)
+    {
+        Debug.Log("Side Effect -> Next Event");
+        sideEffect_nextEvent = true;
+
+        // track seen event
+        previousEvent = currentEvent;
+        //Debug.Log("Previous Event: " + previousEvent);
+
+        // get random index
+        int randomNumber = Random.Range(0, sideEffect.nextEvent.Length);
+
+        // get random event based off of index
+        currentEvent = sideEffect.nextEvent[randomNumber];
+        //Debug.Log(currentEvent);
 
         // display random event
         eventDisplay.SetCurrentEvent(currentEvent);
@@ -130,6 +146,8 @@ public class GameManager : MonoBehaviour
 
     public void ResolveChoice(ChoiceData currentChoice)
     {
+        sideEffect_nextEvent = false;
+
         // display text
         DisplayText(currentChoice.outcomeText);
 
@@ -143,50 +161,55 @@ public class GameManager : MonoBehaviour
         // Do Random Outcome afterwards
         UpdateRandomChoice(currentChoice);
 
-        // get random event based off choice
-        RandomizeEvent(currentChoice);
+        if (sideEffect_nextEvent == false)
+            RandomizeEvent(currentChoice);
     }
 
     private void DisplayText(string outcomeText)
     {
         // Get text
-        Debug.Log("Choice applied");
         Debug.Log(outcomeText);
     }
 
     private void UpdateRandomChoice(ChoiceData currentChoice)
     {
-        Debug.Log
-        (
-            $"OutcomeText: {currentChoice.randomOutcomeText.Length}, " +
-            $"Prob: {currentChoice.probability.Length}, " +
-            $"Moves: {currentChoice.newMovesChange.Length}, " +
-            $"Money: {currentChoice.newMoneyChange.Length}, " +
-            $"Stamina: {currentChoice.newStaminaChange.Length}"
-        );
-
-
         //Check if there is a random outcome
-        if (currentChoice.randomOutcomeText.Length == 0) return;
+        if (currentChoice.sideEffectList.Length == 0) return;
 
         // Get random outcome and a random number 
         int randomOutcomeProbability = Random.Range(0, 100);
-        int randomNumber = Random.Range(0, currentChoice.randomOutcomeText.Length);
-        Debug.Log(randomOutcomeProbability.ToString());
+        int randomNumber = Random.Range(0, currentChoice.sideEffectList.Length);
+        SideEffectSO sideEffect = currentChoice.sideEffectList[randomNumber];
 
         // check if the random number falls outside of the random outcome's ocurrence probability
-        if (randomOutcomeProbability > currentChoice.probability[randomNumber]) return;
+         Debug.Log
+        (
+            $"Side Effect: {sideEffect}, " +
+            $"OutcomeText: {sideEffect.outcomeText}, " +
+            $"Prob: {sideEffect.probability}, " +
+            $"Achieved: {!(randomOutcomeProbability > sideEffect.probability)}, " +
+            $"Moves: {sideEffect.movesChange}, " +
+            $"Money: {sideEffect.moneyChange}, " +
+            $"Stamina: {sideEffect.staminaChange}"
+        );
+
+        if (randomOutcomeProbability > sideEffect.probability) return;
 
         // Get the random outcome text
-        string randomOutcome = currentChoice.randomOutcomeText[randomNumber];
+        string randomOutcome = sideEffect.outcomeText;
         Debug.Log(randomOutcome);
 
         // Get the random outcome's stat change
-        int movesCost = currentChoice.newMovesChange[randomNumber];
-        int moneyCost = currentChoice.newMoneyChange[randomNumber];
-        int staminaCost = currentChoice.newStaminaChange[randomNumber];
+        int movesCost = sideEffect.movesChange;
+        int moneyCost = sideEffect.moneyChange;
+        int staminaCost = sideEffect.staminaChange;
 
         UpdateCurrentStats(movesCost, moneyCost, staminaCost);
+
+        if (sideEffect.nextEvent.Length != 0) 
+        {
+            RandomizeEvent(sideEffect);
+        }
     }
 
     private void ResetGame()

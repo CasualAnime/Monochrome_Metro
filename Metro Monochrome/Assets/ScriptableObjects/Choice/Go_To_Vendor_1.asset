@@ -17,11 +17,7 @@ MonoBehaviour:
   moneyChange: 0
   movesChange: -1
   outcomeText: You zig-zagged amongst the crowd and spotted a young boy selling snacks.
-  randomOutcomeText:
-  - The boy just sold out of snacks.
-  newStaminaChange: fbffffff
-  newMoneyChange: 00000000
-  newMovesChange: 00000000
-  probability: 00000000
+  sideEffectList:
+  - {fileID: 11400000, guid: 719e283f0b8021b4db5cdb467c7675e3, type: 2}
   nextEvent:
   - {fileID: 11400000, guid: 570516b1d75fe9244ad885e331e762e1, type: 2}

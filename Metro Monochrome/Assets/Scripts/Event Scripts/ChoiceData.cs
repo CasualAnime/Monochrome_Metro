@@ -7,12 +7,9 @@ public class ChoiceData : ScriptableObject
 
     // Stat Changes
     public int staminaChange, moneyChange, movesChange = -1;
-
-    //Short Feedback
     public string outcomeText;
-    public string[] randomOutcomeText;
-    public int[] newStaminaChange, newMoneyChange, newMovesChange;
-    public int[] probability;
+
+    public SideEffectSO[] sideEffectList;
 
     public EventSO[] nextEvent;
 }
