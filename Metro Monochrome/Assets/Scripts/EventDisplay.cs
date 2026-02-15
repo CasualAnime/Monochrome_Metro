@@ -8,7 +8,7 @@ using System.Threading;
 public class EventDisplay : MonoBehaviour
 {
     private EventSO currentEvent;
-    public GameManager manager;
+    public EventManager manager;
 
     [SerializeField] GameObject choicePrefab;
     [SerializeField] Transform menuTransform; 
@@ -61,4 +61,6 @@ public class EventDisplay : MonoBehaviour
         ResetCurrentEvent();
         CreateEvent();
     }
+
+
 }
